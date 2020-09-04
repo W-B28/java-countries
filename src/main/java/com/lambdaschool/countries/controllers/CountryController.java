@@ -63,4 +63,52 @@ public class CountryController
 
         return new ResponseEntity<>(rtnList, HttpStatus.OK);
     }
+    //http://localhost:2019/population/total
+    @GetMapping( value ="/population/total", produces = {"application/json"})
+        public ResponseEntity<?> totalPopulation()
+    {
+            List<Country> countryList = new ArrayList<>();
+            long totalPopulation = 0;
+            for(Country c : countryList)
+            {
+               totalPopulation = totalPopulation + c.getPopulation();
+            }
+            return new ResponseEntity<>("The Total Population is " + totalPopulation, HttpStatus.OK);
+    }
+    // http://localhost:2019/population/min
+    @GetMapping(value = "population/min", produces ={"application/json"})
+    public ResponseEntity<?> minPopulation()
+    {
+        List<Country> myList = new ArrayList<>();
+        countryrepos.findAll().iterator().forEachRemaining(myList::add);
+        myList.sort((c1, c2) -> (int) (c2.getPopulation() - c1.getPopulation()));
+        Country c = myList.get(myList.size() -1);
+        return new ResponseEntity<>(c, HttpStatus.OK);
+    }
+
+    // http://localhost:2019/population/max
+    @GetMapping(value = "population/max", produces ={"application/json"})
+    public ResponseEntity<?> maxPopulation()
+    {
+        List<Country> myList = new ArrayList<>();
+        countryrepos.findAll().iterator().forEachRemaining(myList::add);
+        myList.sort((c1, c2) -> (int) (c1.getPopulation() - c2.getPopulation()));
+        Country c = myList.get(myList.size() -1);
+        return new ResponseEntity<>(c, HttpStatus.OK);
+    }
+
+
+
+    // http://localhost:2019/population/median
+    @GetMapping(value = "population/median", produces ={"application/json"})
+    public ResponseEntity<?> medianPopulation()
+    {
+        List<Country> myList = new ArrayList<>();
+        countryrepos.findAll().iterator().forEachRemaining(myList::add);
+        myList.sort((c1, c2) -> (int) (c1.getPopulation() + c2.getPopulation()));
+        Country c = myList.get(myList.size() / 2);
+        return new ResponseEntity<>(c, HttpStatus.OK);
+    }
+
+
 }
